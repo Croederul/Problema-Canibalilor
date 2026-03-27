@@ -21,4 +21,13 @@
         MisionariStgNou is MisionariStg - MisionariBarca,
         MisionariDrNou is MisionariDr + MisionariBarca,
         in_siguranta(stare(CanibaliStgNou, CanibaliDrNou, MisionariStgNou, MisionariDrNou, dr)).
-    
+
+    traversare(stare(CanibaliStg, CanibaliDr, MisionariStg, MisionariDr, dr), stare(CanibaliStgNou, CanibaliDrNou, MisionariStgNou, MisionariDrNou, stg)) :-
+        barca(CanibaliBarca, MisionariBarca),
+        CanibaliDr >= CanibaliBarca,
+        MisionariDr >= MisionariBarca,
+        CanibaliStgNou is CanibaliStg + CanibaliBarca,
+        CanibaliDrNou is CanibaliDr - CanibaliBarca,
+        MisionariStgNou is MisionariStg + MisionariBarca,
+        MisionariDrNou is MisionariDr - MisionariBarca,
+        in_siguranta(stare(CanibaliStgNou, CanibaliDrNou, MisionariStgNou, MisionariDrNou, stg)).
