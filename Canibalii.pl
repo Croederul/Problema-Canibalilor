@@ -1,4 +1,4 @@
-% stare(CanibaliStg, CanibaliDr, MisionariStg, MisionariDr, PozitieBarca) :-
+% stare(CanibaliStg, CanibaliDr, MisionariStg, MisionariDr, PozitieBarca)
 % Verificarea sigurantei malurilor
 verifica_mal(Misionari, Canibali) :- Misionari = 0.
 verifica_mal(Misionari, Canibali) :- Misionari >= Canibali.
@@ -34,3 +34,28 @@ traversare(stare(CanibaliStg, CanibaliDr, MisionariStg, MisionariDr, dr), stare(
         MisionariStgNou is MisionariStg + MisionariBarca,
         MisionariDrNou is MisionariDr - MisionariBarca,
         in_siguranta(stare(CanibaliStgNou, CanibaliDrNou, MisionariStgNou, MisionariDrNou, stg)).
+
+% Logica de cautare (DFS)
+% Cazul de baza: am ajuns la starea finala
+dfs(stare(0, 3, 0, 3, dr), _, Cale, Cale).
+
+% Pasul recursiv
+dfs(StareCurenta, Vizitate, CaleAcumulata, CaleFinala) :-
+    traversare(StareCurenta, StareNoua),
+    \+ member(StareNoua, Vizitate),
+    dfs(StareNoua, [StareNoua|Vizitate], [StareNoua|CaleAcumulata], CaleFinala).
+
+% Rezolvare si afisare solutie
+
+rezolva :-
+    Initiala = stare(3, 0, 3, 0, stg),
+    % Cautam solutia incepand cu starea initiala in lista de vizitate
+    (dfs(Initiala, [Initiala], [Initiala], DrumInversat) ->
+        reverse(DrumInversat, Drum),
+        afiseaza_solutie(Drum)
+    ;   write('Nu a fost gasita nicio solutie.')).
+
+afiseaza_solutie([]).
+afiseaza_solutie([stare(CanibaliStg, CanibaliDr, MisionariStg, MisionariDr, Barca)|Rest]) :-
+    format('Mal Stanga: ~dC, ~dM | Barca: ~w | Mal Dreapta: ~dC, ~dM~n', [CanibaliStg, MisionariStg, Barca, CanibaliDr, MisionariDr]),
+    afiseaza_solutie(Rest).
